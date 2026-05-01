@@ -92,7 +92,7 @@
 ### Cách 1: Cài 1 lệnh (khuyến nghị)
 
 ```bash
-bash <(curl -sL https://dl.wpanel.vn/install.sh)
+bash <(curl -sL domain.com)
 ```
 
 Quá trình cài đặt gồm **5 bước** tự động:
