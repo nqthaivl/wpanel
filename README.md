@@ -43,7 +43,8 @@
 | Tính năng | Mô tả |
 |---|---|
 | 📊 **Dashboard** | Giám sát CPU, RAM, Disk, Network, Uptime realtime |
-| 🌐 **Quản lý Website** | Tạo, xoá, cấu hình Nginx/Apache/OpenLiteSpeed |
+| 🌐 **Quản lý Website** | Tạo, xoá, cấu hình Nginx/Apache/OpenLiteSpeed — **chọn web server riêng cho từng domain** |
+| 🌐 **Multi-WebServer** | Nginx Reverse Proxy + Backend (Apache/OLS) — mô hình Production hiệu năng cao |
 | 🔐 **SSL Manager** | Cài đặt SSL Let's Encrypt tự động (Certbot) |
 | 🗄️ **Database** | Quản lý MySQL/MariaDB, phpMyAdmin tích hợp |
 | 📁 **File Manager** | Trình quản lý tệp trực quan, upload/download/edit |
@@ -53,7 +54,7 @@
 | 🔔 **Cảnh báo** | Thông báo Telegram/Discord khi CPU/RAM/Disk cao |
 | ☁️ **Cloudflare** | Quản lý DNS records trực tiếp qua API |
 | 📧 **Mail Server** | Cài đặt Postfix + Dovecot + Roundcube Webmail |
-| 🛡️ **Bảo mật** | Fail2Ban, Firewall UFW, SSH Key management |
+| 🛡️ **Bảo mật** | Fail2Ban, Firewall UFW, SSH Key, **Xác thực 2 bước (2FA TOTP)** |
 | 💿 **Extend Disk** | Mở rộng ổ đĩa 1-click sau khi nâng cấp VPS |
 | 🔄 **Swap** | Tạo/quản lý Swap Memory |
 | 🔑 **SSH Key** | Quản lý SSH Key cho xác thực không mật khẩu |
@@ -139,6 +140,9 @@ wpanel              # Hiển thị menu trợ giúp + URL panel
 | `wpanel restart` | Khởi động lại WPanel |
 | `wpanel status` | Xem trạng thái hoạt động |
 | `wpanel log` | Xem log realtime (Ctrl+C để thoát) |
+| `wpanel passwd` | Đổi mật khẩu tài khoản admin |
+| `wpanel port` | Đổi port đăng nhập panel |
+| `wpanel disable-2fa` | Tắt xác thực 2 bước (2FA) cho tài khoản |
 | `wpanel update` | Cập nhật WPanel (cài lại dependencies) |
 | `wpanel uninstall` | Gỡ cài đặt hoàn toàn |
 
@@ -148,11 +152,11 @@ wpanel              # Hiển thị menu trợ giúp + URL panel
 # Khởi động lại khi gặp lỗi
 wpanel restart
 
-# Xem log để debug
-wpanel log
+# Đổi mật khẩu admin
+wpanel passwd
 
-# Kiểm tra trạng thái
-wpanel status
+# Đổi port đăng nhập (mặc định 9002)
+wpanel port
 ```
 
 ---
@@ -174,9 +178,13 @@ Trang tổng quan hiển thị toàn bộ thông tin hệ thống:
 
 ### 🌐 Quản Lý Website
 
-- Tạo website mới (Nginx / Apache / OpenLiteSpeed)
-- Cấu hình Virtual Host
-- Quản lý PHP version (7.4, 8.0, 8.1, 8.2, 8.3)
+- Tạo website mới với **chọn Web Server riêng cho từng domain**:
+  - Nginx (trực tiếp)
+  - Apache (trực tiếp)
+  - OpenLiteSpeed (trực tiếp)
+  - **Multi-WebServer** (Nginx Proxy → Apache/OLS backend)
+- Cấu hình Virtual Host tự động
+- Quản lý PHP version (7.4, 8.1, 8.2, 8.3)
 - Reverse Proxy cho ứng dụng Node.js, Python
 
 ---
@@ -248,6 +256,32 @@ Cài đặt 1-click các dịch vụ phổ biến:
 | Firewall UFW | Dovecot | Rclone |
 | SSH Key | Roundcube Webmail | phpMyAdmin |
 
+### 🌐 Cấu Hình Web Stack (1-Click)
+
+Cài đặt trọn bộ Web Stack chỉ với 1 click:
+
+| Stack | Thành phần | Ghi chú |
+|---|---|---|
+| **LNMP** | Nginx + PHP + MySQL + phpMyAdmin + Certbot | Hiệu năng cao, chịu tải lớn |
+| **LAMP** | Apache + PHP + MySQL + phpMyAdmin + Certbot | Tương thích .htaccess |
+| **LLMP** | OpenLiteSpeed + LsPHP + MySQL + phpMyAdmin | HTTP/3 QUIC, cache tích hợp |
+| **Multi-WebServer** | Nginx (Proxy) + Apache/OLS (Backend) + PHP + MySQL | **Mô hình Production khuyên dùng** |
+
+#### Multi-WebServer Hosting
+
+```
+Client → Nginx (Reverse Proxy) → Apache/OpenLiteSpeed (Backend) → PHP → MySQL
+             │                           │
+             ├─ Xử lý SSL               ├─ Xử lý PHP
+             ├─ Static files (cache)     ├─ .htaccess (Apache)
+             └─ Load balancing           └─ LsPHP (OLS)
+```
+
+- **Nginx đứng trước** xử lý SSL termination, static files (ảnh, CSS, JS), caching và load balancing
+- **Backend (Apache/OLS)** xử lý PHP, .htaccess và dynamic content
+- Hiệu năng cao nhất, phù hợp cho môi trường **Production**
+- Mỗi domain có thể chọn web server riêng biệt
+
 ---
 
 ### ⚙️ Cấu Hình Hệ Thống (Settings)
@@ -288,6 +322,8 @@ Hỗ trợ kênh thông báo:
 - 🛡️ Tích hợp Rate Limiter chống brute-force
 - 🔑 Hỗ trợ SSH Key authentication
 - 📦 Mã nguồn biên dịch binary (không thể đọc/chỉnh sửa)
+- 🔒 **Xác thực 2 bước (2FA)** — TOTP compatible (Google Authenticator, Authy)
+- 🔗 **URL bảo mật** — Đường dẫn truy cập panel được mã hoá ngẫu nhiên
 
 ---
 
@@ -301,9 +337,14 @@ Hỗ trợ kênh thông báo:
 ├── venv/                 # Python virtual environment
 ├── data/                 # Database & dữ liệu
 ├── web_templates/        # HTML templates
+├── templates/            # Nginx/Apache/LiteSpeed config templates
+│   ├── nginx_template.conf
+│   ├── nginx_proxy_template.conf   # Multi-WebServer template
+│   ├── apache_template.conf
+│   └── litespeed_template.conf
 ├── static/               # CSS, JS, images
 │   ├── css/style.css
-│   └── js/app.js
+│   └── js/app.js         # Giao diện Lucide Icons
 └── scripts/              # Shell scripts cài đặt dịch vụ
 ```
 
