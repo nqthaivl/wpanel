@@ -426,7 +426,7 @@ curl -fsSL https://packages.sury.org/python/apt.gpg | gpg --dearmor -o /usr/shar
 dnf install python3.12
 
 # Sau đó cài lại WPanel
-bash <(curl -sL https://dl.wpanel.vn/install.sh)
+bash <(curl -sL https://domain.com/install.sh)
 ```
 
 ### Quên mật khẩu admin?
