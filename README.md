@@ -1,7 +1,9 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/WPanel-v1.0-blue?style=for-the-badge&logo=linux&logoColor=white" alt="WPanel">
-  <img src="https://img.shields.io/badge/Python-3.10+-green?style=for-the-badge&logo=python&logoColor=white" alt="Python">
+  <img src="https://img.shields.io/badge/WPanel-v2.0-blue?style=for-the-badge&logo=linux&logoColor=white" alt="WPanel">
+  <img src="https://img.shields.io/badge/Python-3.12-green?style=for-the-badge&logo=python&logoColor=white" alt="Python">
   <img src="https://img.shields.io/badge/Ubuntu-22.04%20|%2024.04-orange?style=for-the-badge&logo=ubuntu&logoColor=white" alt="Ubuntu">
+  <img src="https://img.shields.io/badge/Debian-13%20Trixie-A81D33?style=for-the-badge&logo=debian&logoColor=white" alt="Debian">
+  <img src="https://img.shields.io/badge/CentOS%20Stream-9-262577?style=for-the-badge&logo=centos&logoColor=white" alt="CentOS">
   <img src="https://img.shields.io/badge/License-Private-red?style=for-the-badge" alt="License">
 </p>
 
@@ -65,24 +67,49 @@
 
 | Yêu cầu | Tối thiểu |
 |---|---|
-| **Hệ điều hành** | Ubuntu 22.04 / 24.04 LTS |
+| **Hệ điều hành** | Ubuntu 22.04+, Debian 13, CentOS Stream 9 |
+| **Python** | 3.12 (tự động cài đặt khi install) |
 | **CPU** | 1 vCPU |
 | **RAM** | 512 MB |
 | **Disk** | 5 GB trống |
 | **Quyền** | Root |
 | **Port** | 9002 (mặc định) |
 
-> **Lưu ý:** WPanel cũng hỗ trợ Debian 11+, CentOS Stream 9, AlmaLinux 9, Rocky Linux 9.
+### Hệ điều hành được hỗ trợ
+
+| OS | Phiên bản | Ghi chú |
+|---|---|---|
+| **Ubuntu** | 22.04, 24.04 | ✅ Khuyên dùng |
+| **Debian** | 13 (Trixie) | ✅ Hỗ trợ đầy đủ |
+| **CentOS Stream** | 9 | ✅ Hỗ trợ đầy đủ |
+
+> **Lưu ý:** Bản biên dịch (Cython/Nuitka) yêu cầu đúng phiên bản Python đã build (mặc định 3.12). Installer sẽ tự động cài đặt phiên bản Python cần thiết.
 
 ---
 
 ## 🚀 Cài Đặt
 
-### Cách 1: Cài nhanh (khuyến nghị)
+### Cách 1: Cài 1 lệnh (khuyến nghị)
+
+```bash
+bash <(curl -sL https://dl.wpanel.vn/install.sh)
+```
+
+Quá trình cài đặt gồm **5 bước** tự động:
+
+```
+[1/5] Đang tải mã nguồn WPanel...
+[2/5] Đang giải nén mã nguồn...
+[3/5] Kiểm tra phiên bản Python...     ← Tự cài Python 3.12 nếu cần
+[4/5] Bắt đầu cài đặt WPanel...        ← Tạo venv, cài dependencies
+[5/5] Cài đặt Web Stack...              ← LNMP/LAMP/LLMP/Multi-WS
+```
+
+### Cách 2: Cài thủ công
 
 ```bash
 # Tải về
-wget https://your-domain.com/wpanel-release.tar.gz
+wget https://dl.wpanel.vn/wpanel-release.tar.gz
 
 # Giải nén
 tar xzf wpanel-release.tar.gz
@@ -91,7 +118,7 @@ tar xzf wpanel-release.tar.gz
 cd wpanel && bash wpanel.sh
 ```
 
-### Cách 2: Cài từ source
+### Cách 3: Cài từ source (dev)
 
 ```bash
 # Clone source code
@@ -262,23 +289,29 @@ Cài đặt trọn bộ Web Stack chỉ với 1 click:
 
 | Stack | Thành phần | Ghi chú |
 |---|---|---|
-| **LNMP** | Nginx + PHP + MySQL + phpMyAdmin + Certbot | Hiệu năng cao, chịu tải lớn |
-| **LAMP** | Apache + PHP + MySQL + phpMyAdmin + Certbot | Tương thích .htaccess |
-| **LLMP** | OpenLiteSpeed + LsPHP + MySQL + phpMyAdmin | HTTP/3 QUIC, cache tích hợp |
-| **Multi-WebServer** | Nginx (Proxy) + Apache/OLS (Backend) + PHP + MySQL | **Mô hình Production khuyên dùng** |
+| **LNMP** | Nginx + MariaDB + PHP + phpMyAdmin + Certbot | Hiệu năng cao, chịu tải lớn |
+| **LAMP** | Apache + MariaDB + PHP + phpMyAdmin + Certbot | Tương thích .htaccess |
+| **LLMP** | OpenLiteSpeed + MariaDB + LsPHP + phpMyAdmin + Certbot | HTTP/3 QUIC, cache tích hợp |
+| **Multi-WebServer** | Nginx (Proxy :80/:443) + Apache (Backend :8080) + MariaDB + PHP | **Mô hình Production khuyên dùng** |
 
 #### Multi-WebServer Hosting
 
 ```
-Client → Nginx (Reverse Proxy) → Apache/OpenLiteSpeed (Backend) → PHP → MySQL
-             │                           │
-             ├─ Xử lý SSL               ├─ Xử lý PHP
-             ├─ Static files (cache)     ├─ .htaccess (Apache)
-             └─ Load balancing           └─ LsPHP (OLS)
+Client → Nginx (Reverse Proxy :80/:443) → Apache (Backend :8080/:8443) → PHP → MariaDB
+             │                                    │
+             ├─ SSL termination (Certbot)         ├─ Xử lý PHP
+             ├─ Static files (cache)              ├─ .htaccess
+             └─ Load balancing                    └─ Dynamic content
 ```
 
+| Thành phần | Port | Vai trò |
+|---|---|---|
+| **Nginx** | 80, 443 | Reverse Proxy, SSL, static files |
+| **Apache** | 8080, 8443 | Backend xử lý PHP, .htaccess |
+| **Certbot** | — | SSL Let's Encrypt qua Nginx plugin |
+
 - **Nginx đứng trước** xử lý SSL termination, static files (ảnh, CSS, JS), caching và load balancing
-- **Backend (Apache/OLS)** xử lý PHP, .htaccess và dynamic content
+- **Backend (Apache)** xử lý PHP, .htaccess và dynamic content
 - Hiệu năng cao nhất, phù hợp cho môi trường **Production**
 - Mỗi domain có thể chọn web server riêng biệt
 
@@ -332,9 +365,10 @@ Hỗ trợ kênh thông báo:
 ```
 /opt/wpanel/              # Thư mục cài đặt
 ├── *.so                  # Module biên dịch (binary)
+├── .python_version       # Python version yêu cầu (VD: 3.12)
 ├── run.py                # Entry point
 ├── requirements.txt      # Python dependencies
-├── venv/                 # Python virtual environment
+├── venv/                 # Python virtual environment (python3.12)
 ├── data/                 # Database & dữ liệu
 ├── web_templates/        # HTML templates
 ├── templates/            # Nginx/Apache/LiteSpeed config templates
@@ -368,16 +402,40 @@ wpanel restart
 ### Port 9002 bị chặn?
 
 ```bash
-# Mở port trên UFW
+# Ubuntu/Debian — Mở port trên UFW
 ufw allow 9002/tcp
 
-# Hoặc trên firewalld
+# CentOS/RHEL — Mở port trên firewalld
 firewall-cmd --permanent --add-port=9002/tcp && firewall-cmd --reload
+```
+
+### Lỗi `undefined symbol: _PyThreadState_UncheckedGet`?
+
+Lỗi này xảy ra khi Python version trên VPS khác với bản dùng để build binary.
+
+```bash
+# Kiểm tra Python version cần thiết
+cat /opt/wpanel/.python_version
+
+# Cài đúng Python version (VD: 3.12)
+# Ubuntu:
+add-apt-repository ppa:deadsnakes/ppa && apt install python3.12 python3.12-venv
+
+# Debian:
+curl -fsSL https://packages.sury.org/python/apt.gpg | gpg --dearmor -o /usr/share/keyrings/sury-python.gpg
+
+# CentOS:
+dnf install python3.12
+
+# Sau đó cài lại WPanel
+bash <(curl -sL https://dl.wpanel.vn/install.sh)
 ```
 
 ### Quên mật khẩu admin?
 
-Liên hệ hỗ trợ kỹ thuật để reset tài khoản.
+```bash
+wpanel passwd
+```
 
 ---
 
