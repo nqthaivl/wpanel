@@ -110,7 +110,7 @@ Quá trình cài đặt gồm **5 bước** tự động:
 wget https://domain.com/wpanel.tar.gz
 
 # Giải nén
-tar xzf wpanel-release.tar.gz
+tar xzf wpanel.tar.gz
 
 # Cài đặt
 cd wpanel && bash wpanel.sh
