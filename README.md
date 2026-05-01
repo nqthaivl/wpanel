@@ -83,8 +83,6 @@
 | **Debian** | 13 (Trixie) | ✅ Hỗ trợ đầy đủ |
 | **CentOS Stream** | 9 | ✅ Hỗ trợ đầy đủ |
 
-> **Lưu ý:** Bản biên dịch (Cython/Nuitka) yêu cầu đúng phiên bản Python đã build (mặc định 3.12). Installer sẽ tự động cài đặt phiên bản Python cần thiết.
-
 ---
 
 ## 🚀 Cài Đặt
