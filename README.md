@@ -79,8 +79,6 @@
 | OS | Phiên bản | Ghi chú |
 |---|---|---|
 | **Ubuntu** | 22.04, 24.04 | ✅ Khuyên dùng |
-| **Debian** | 13 (Trixie) | ✅ Hỗ trợ đầy đủ |
-| **CentOS Stream** | 9 | ✅ Hỗ trợ đầy đủ |
 
 ---
 
