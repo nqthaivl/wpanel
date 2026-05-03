@@ -105,30 +105,6 @@ Quá trình cài đặt gồm **5 bước** tự động:
 [4/5] Bắt đầu cài đặt WPanel...        ← Tạo venv, cài dependencies
 [5/5] Cài đặt Web Stack...              ← LNMP/LAMP/LLMP/Multi-WS
 ```
-
-### Cách 2: Cài thủ công
-
-```bash
-# Tải về
-wget https://dl.wpanel.vn/wpanel-release.tar.gz
-
-# Giải nén
-tar xzf wpanel-release.tar.gz
-
-# Cài đặt
-cd wpanel && bash wpanel.sh
-```
-
-### Cách 3: Cài từ source (dev)
-
-```bash
-# Clone source code
-git clone https://github.com/your-repo/wpanel.git
-
-# Chạy install script
-cd wpanel && bash wpanel.sh
-```
-
 ### Sau khi cài xong
 
 Trình cài đặt sẽ hiện thông tin đăng nhập:
