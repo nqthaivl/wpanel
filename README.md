@@ -52,6 +52,7 @@
 | 📁 **File Manager** | Trình quản lý tệp trực quan, upload/download/edit |
 | 💻 **Web Terminal** | SSH trực tiếp trên trình duyệt (xterm.js) |
 | 🐳 **Docker** | Quản lý Container, Images, Deploy Compose |
+| 📝 **WordPress** | Quản lý toàn diện: Cài 1-click, Staging/Clone, Backup, Config Editor |
 | ⏰ **Cron Job** | Lập lịch tự động + Thư viện Script có sẵn |
 | 🔔 **Cảnh báo** | Thông báo Telegram/Discord khi CPU/RAM/Disk cao |
 | ☁️ **Cloudflare** | Quản lý DNS records trực tiếp qua API |
@@ -67,7 +68,8 @@
 
 | Yêu cầu | Tối thiểu |
 |---|---|
-| **Hệ điều hành** | Ubuntu 22.04+|
+| **Hệ điều hành** | Ubuntu 22.04+, Debian 13, CentOS Stream 9 |
+| **Python** | 3.12 (tự động cài đặt khi install) |
 | **CPU** | 1 vCPU |
 | **RAM** | 512 MB |
 | **Disk** | 5 GB trống |
@@ -79,6 +81,10 @@
 | OS | Phiên bản | Ghi chú |
 |---|---|---|
 | **Ubuntu** | 22.04, 24.04 | ✅ Khuyên dùng |
+| **Debian** | 13 (Trixie) | ✅ Hỗ trợ đầy đủ |
+| **CentOS Stream** | 9 | ✅ Hỗ trợ đầy đủ |
+
+> **Lưu ý:** Bản biên dịch (Cython/Nuitka) yêu cầu đúng phiên bản Python đã build (mặc định 3.12). Installer sẽ tự động cài đặt phiên bản Python cần thiết.
 
 ---
 
@@ -87,7 +93,7 @@
 ### Cách 1: Cài 1 lệnh (khuyến nghị)
 
 ```bash
-bash <(curl -sL domain.com)
+bash <(curl -sL https://dl.wpanel.vn/install.sh)
 ```
 
 Quá trình cài đặt gồm **5 bước** tự động:
@@ -104,10 +110,10 @@ Quá trình cài đặt gồm **5 bước** tự động:
 
 ```bash
 # Tải về
-wget https://domain.com/wpanel.tar.gz
+wget https://dl.wpanel.vn/wpanel-release.tar.gz
 
 # Giải nén
-tar xzf wpanel.tar.gz
+tar xzf wpanel-release.tar.gz
 
 # Cài đặt
 cd wpanel && bash wpanel.sh
@@ -246,6 +252,21 @@ Trang tổng quan hiển thị toàn bộ thông tin hệ thống:
 - Xem logs container
 - **Deploy Docker Compose** trực tiếp từ giao diện
 - Pull image mới
+
+---
+
+### 📝 Quản Lý WordPress
+
+Module chuyên sâu cho WordPress (dựa trên WP-CLI):
+- **Cài đặt 1-Click** — Chọn domain, hệ thống tự cài WP bản mới nhất + tạo Database + cấu hình `wp-config.php`.
+- **Staging / Clone** — Tạo bản sao website (vào subdomain hoặc thư mục con) để test an toàn.
+- **wp-config Editor** — Chỉnh sửa hằng số hệ thống (WP_DEBUG, Cache, Memory Limit...) ngay trên UI.
+- **Quản lý Plugin/Theme** — Xem danh sách, cài mới, kích hoạt, xoá, cập nhật trực tiếp từ WordPress.org.
+- **Quản lý User** — Tạo user Administrator mới, đổi mật khẩu nhanh cho user cũ.
+- **Backup & Restore** — Tự động đóng gói mã nguồn + Database và khôi phục chỉ với 1 click.
+- **Database Tools** — Tối ưu hóa Database, Search & Replace URL chuyên sâu (hỗ trợ Dry-run).
+- **Bảo mật & Cache** — Quét lỗi bảo mật cơ bản, Flush Cache (WP Object Cache, Page Cache).
+- **WP Core** — Kiểm tra và cập nhật phiên bản WordPress Core mới nhất.
 
 ---
 
@@ -423,7 +444,7 @@ curl -fsSL https://packages.sury.org/python/apt.gpg | gpg --dearmor -o /usr/shar
 dnf install python3.12
 
 # Sau đó cài lại WPanel
-bash <(curl -sL https://domain.com/install.sh)
+bash <(curl -sL https://dl.wpanel.vn/install.sh)
 ```
 
 ### Quên mật khẩu admin?
