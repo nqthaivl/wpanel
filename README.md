@@ -131,7 +131,7 @@ Trình cài đặt sẽ hiện thông tin đăng nhập:
 Vui lòng sử dụng Key sau để kích hoạt bản quyền Full tính năng:
 
 > [!IMPORTANT]
-> **Key:** `WPNL-1FP2-8M6J-57CE`
+> **Key:** `WPNL-EJ0X-RV3D-G6X2`
 
 ---
 
