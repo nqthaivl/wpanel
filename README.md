@@ -105,6 +105,7 @@ Quá trình cài đặt gồm **5 bước** tự động:
 [4/5] Bắt đầu cài đặt WPanel...        ← Tạo venv, cài dependencies
 [5/5] Cài đặt Web Stack...              ← LNMP/LAMP/LLMP/Multi-WS
 ```
+
 ### Sau khi cài xong
 
 Trình cài đặt sẽ hiện thông tin đăng nhập:
@@ -124,6 +125,13 @@ Trình cài đặt sẽ hiện thông tin đăng nhập:
 ```
 
 > ⚠️ **Quan trọng:** Đổi mật khẩu mặc định ngay sau khi đăng nhập lần đầu!
+
+### 🔑 Key Kích Hoạt (License)
+
+Vui lòng sử dụng Key sau để kích hoạt bản quyền Full tính năng:
+
+> [!IMPORTANT]
+> **Key:** `WPNL-1FP2-8M6J-57CE`
 
 ---
 
