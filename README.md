@@ -68,7 +68,7 @@
 
 | Yêu cầu | Tối thiểu |
 |---|---|
-| **Hệ điều hành** | Ubuntu 22.04+, Debian 13, CentOS Stream 9 |
+| **Hệ điều hành** | Ubuntu 22.04+ |
 | **Python** | 3.12 (tự động cài đặt khi install) |
 | **CPU** | 1 vCPU |
 | **RAM** | 512 MB |
